@@ -6,20 +6,72 @@ const API_KEY = "a50795a3bb583d18533a97c8bf38f60b";
 
 class App extends React.Component {
 
+  state = {
+    country: undefined,
+    city: undefined,
+    description: undefined,
+    temp: undefined,
+    feels_like: undefined,
+    humidity: undefined,
+    pressure: undefined,
+    temp_max: undefined,
+    temp_min: undefined,
+    sunrise: undefined,
+    sunset: undefined
+  }
+
   gettingWeather = async (event) => {
 
     event.preventDefault();
     const city = event.target.elements.city.value;
-    const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
-    const data = await api_url.json();
-    console.log(data);
+
+    if (city) {
+
+      const api_url = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${API_KEY}&units=metric`)
+      const data = await api_url.json();
+      console.log(data);
+
+      let sunriseInSec = data.sys.sunrise
+      let dateSunrise = new Date(sunriseInSec * 1000)
+      let timesunrise = dateSunrise.toLocaleTimeString()
+
+      let sunsetInSec = data.sys.sunset
+      let dateSunset = new Date(sunsetInSec * 1000)
+      let timeSunset = dateSunset.toLocaleTimeString()
+
+      this.setState({
+        country: data.sys.country,
+        city: data.name,
+        description: data.weather[0].description,
+        temp: data.main.temp,
+        feels_like: data.main.feels_like,
+        humidity: data.main.humidity,
+        pressure: data.main.pressure,
+        temp_max: data.main.temp_max,
+        temp_min: data.main.temp_min,
+        sunrise: timesunrise,
+        sunset: timeSunset
+      });
+    }
   }
 
   render() {
     return (
       <div>
         <Form weatherMethod={this.gettingWeather} />
-        <Weather />
+        <Weather
+          country={this.state.country}
+          city={this.state.city}
+          description={this.state.description}
+          temp={this.state.temp}
+          feels_like={this.state.feels_like}
+          humidity={this.state.humidity}
+          pressure={this.state.pressure}
+          temp_max={this.state.temp_max}
+          temp_min={this.state.temp_min}
+          sunrise={this.state.sunrise}
+          sunset={this.state.sunset}
+        />
       </div>
     );
   }
