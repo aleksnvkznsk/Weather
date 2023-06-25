@@ -17,7 +17,8 @@ class App extends React.Component {
     temp_max: undefined,
     temp_min: undefined,
     sunrise: undefined,
-    sunset: undefined
+    sunset: undefined,
+    error: undefined
   }
 
   gettingWeather = async (event) => {
@@ -50,7 +51,23 @@ class App extends React.Component {
         temp_max: data.main.temp_max,
         temp_min: data.main.temp_min,
         sunrise: timesunrise,
-        sunset: timeSunset
+        sunset: timeSunset,
+        error: undefined
+      });
+    } else {
+      this.setState({
+        country: undefined,
+        city: undefined,
+        description: undefined,
+        temp: undefined,
+        feels_like: undefined,
+        humidity: undefined,
+        pressure: undefined,
+        temp_max: undefined,
+        temp_min: undefined,
+        sunrise: undefined,
+        sunset: undefined,
+        error: "Введите город"
       });
     }
   }
@@ -71,6 +88,7 @@ class App extends React.Component {
           temp_min={this.state.temp_min}
           sunrise={this.state.sunrise}
           sunset={this.state.sunset}
+          error={this.state.error}
         />
       </div>
     );

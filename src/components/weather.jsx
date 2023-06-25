@@ -17,6 +17,7 @@ const Weather = props => {
                     <p>Закат: {props.sunset}</p>
                 </div>
             }
+            <p>{props.error}</p>
         </div>
     );
 }
